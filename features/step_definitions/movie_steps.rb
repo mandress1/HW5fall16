@@ -1,4 +1,5 @@
 # Completed step definitions for basic features: AddMovie, ViewDetails, EditMovie 
+monthNums = {"Jan" => 1, "Feb" => 2, "Mar" => 3, "Apr" => 4, "May" => 5, "Jun" => 6, "Jul" => 7, "Aug" => 8, "Sep" => 9, "Oct" => 10, "Nov" => 11, "Dec" => 12}
 
 Given /^I am on the RottenPotatoes home page$/ do
   visit movies_path
@@ -46,12 +47,15 @@ Given /^I am on the RottenPotatoes home page$/ do
 # Add a declarative step here for populating the DB with movies.
 
 Given /the following movies have been added to RottenPotatoes:/ do |movies_table|
-  pending  # Remove this statement when you finish implementing the test step
+  # Remove this statement when you finish implementing the test step
   movies_table.hashes.each do |movie|
     # Each returned movie will be a hash representing one row of the movies_table
     # The keys will be the table headers and the values will be the row contents.
     # Entries can be directly to the database with ActiveRecord methods
     # Add the necessary Active Record call(s) to populate the database.
+    # movDate = movie["release_date"].split("-")
+    # puts "#{{"title" => movie["title"], "rating" => movie["rating"], }}"
+    Movie.create!(movie)
   end
 end
 
