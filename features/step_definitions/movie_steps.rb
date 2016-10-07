@@ -64,21 +64,17 @@ When /^I have opted to see movies rated: "(.*?)"$/ do |arg1|
   
   all('input[type=checkbox]').each do |cBox|
     if ratings.include?(cBox[:id][8..-1])
-      page.check(cBox[:id]) unless cBox.checked? == "checked"
+      check(cBox[:id])
     else
-      page.check(cBox[:id]) unless (cBox.checked? != "checked")
+      uncheck(cBox[:id])
     end
   end
   
-  refresh = find('input[name="commit"]')
-  page.click_button(refresh)
+  click_button("ratings_submit")
 end
 
 Then /^I should see only movies rated: "(.*?)"$/ do |arg1|
   ratings = arg1.scan(/[^, ]+/)
-  all('input[type=checkbox]').each do |cBox|
-    puts "#{cBox[:id]} checked?: #{cBox.checked? == "checked"}"
-  end
   all('td').each do |el|
     if el[:class] == "rating"
       expect(ratings).to include(el.text)
@@ -87,7 +83,20 @@ Then /^I should see only movies rated: "(.*?)"$/ do |arg1|
 end
 
 Then /^I should see all of the movies$/ do
-  pending  #remove this statement after implementing the test step
+  seen = {}
+  Movie.all.each do |mov|
+    seen[mov.title] = false
+  end
+  
+  all('td').each do |td|
+    if td[:class] == "title"
+      seen[td.text] = true
+    end
+  end
+  
+  seen.each do |title, seen|
+    expect(seen)
+  end
 end
 
 
