@@ -47,14 +47,11 @@ Given /^I am on the RottenPotatoes home page$/ do
 # Add a declarative step here for populating the DB with movies.
 
 Given /the following movies have been added to RottenPotatoes:/ do |movies_table|
-  # Remove this statement when you finish implementing the test step
   movies_table.hashes.each do |movie|
     # Each returned movie will be a hash representing one row of the movies_table
     # The keys will be the table headers and the values will be the row contents.
     # Entries can be directly to the database with ActiveRecord methods
-    # Add the necessary Active Record call(s) to populate the database.
-    # movDate = movie["release_date"].split("-")
-    # puts "#{{"title" => movie["title"], "rating" => movie["rating"], }}"
+    # Add the necessary Active Record call(s) to populate the database."
     Movie.create!(movie)
   end
 end
@@ -63,11 +60,25 @@ When /^I have opted to see movies rated: "(.*?)"$/ do |arg1|
   # HINT: use String#split to split up the rating_list, then
   # iterate over the ratings and check/uncheck the ratings
   # using the appropriate Capybara command(s)
-  pending  #remove this statement after implementing the test step
+  ratings = arg1.scan(/[^, ]+/)
+  
+  all('input[type=checkbox]').each do |cBox|
+    if ratings.include?(cBox[:id][8..-1])
+      cBox.click unless cBox.checked?
+    else
+      cBox.click unless not cBox.checked?
+    end
+  end
+  click_button 'Refresh'
 end
 
 Then /^I should see only movies rated: "(.*?)"$/ do |arg1|
-  pending  #remove this statement after implementing the test step
+  ratings = arg1.scan(/[^, ]+/)
+  all('td').each do |el|
+    if el[:class] == "rating"
+      expect(ratings).to include(el.text)
+    end
+  end
 end
 
 Then /^I should see all of the movies$/ do
