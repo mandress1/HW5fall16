@@ -64,16 +64,21 @@ When /^I have opted to see movies rated: "(.*?)"$/ do |arg1|
   
   all('input[type=checkbox]').each do |cBox|
     if ratings.include?(cBox[:id][8..-1])
-      cBox.click unless cBox.checked?
+      page.check(cBox[:id]) unless cBox.checked? == "checked"
     else
-      cBox.click unless not cBox.checked?
+      page.check(cBox[:id]) unless (cBox.checked? != "checked")
     end
   end
-  click_button 'Refresh'
+  
+  refresh = find('input[name="commit"]')
+  page.click_button(refresh)
 end
 
 Then /^I should see only movies rated: "(.*?)"$/ do |arg1|
   ratings = arg1.scan(/[^, ]+/)
+  all('input[type=checkbox]').each do |cBox|
+    puts "#{cBox[:id]} checked?: #{cBox.checked? == "checked"}"
+  end
   all('td').each do |el|
     if el[:class] == "rating"
       expect(ratings).to include(el.text)
