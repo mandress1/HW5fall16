@@ -101,7 +101,6 @@ end
 
 When /^I have opted to sort the movies by "(.*?)"$/ do |arg1|
   id = arg1.gsub(' ', '_')+"_header"
-  puts "#{id}"
   click_link(id)
 end
 
@@ -114,7 +113,6 @@ Then /^I should see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
   end
   ind1 = movies.index(arg1)
   ind2 = movies.index(arg2)
-  puts "1: #{ind1} 2:#{ind2}"
   expect(arg1).not_to be(nil)
   expect(arg2).not_to be(nil)
   expect(ind1 < ind2).to be(true)
