@@ -94,8 +94,8 @@ Then /^I should see all of the movies$/ do
     end
   end
   
-  seen.each do |title, seen|
-    expect(seen)
+  seen.each do |title, hasSeen|
+    expect(hasSeen).to eq(true)
   end
 end
 
@@ -106,9 +106,16 @@ When /^I have opted to sort the movies by "(.*?)"$/ do |arg1|
 end
 
 Then /^I should see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
+  movies=[]
   all('td').each do |td|
     if td[:class] == "title"
-      puts "#{td.text}"
+      movies.push(td.text)
     end
   end
+  ind1 = movies.index(arg1)
+  ind2 = movies.index(arg2)
+  puts "1: #{ind1} 2:#{ind2}"
+  expect(arg1).not_to be(nil)
+  expect(arg2).not_to be(nil)
+  expect(ind1 < ind2).to be(true)
 end
