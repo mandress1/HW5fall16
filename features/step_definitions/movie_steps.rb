@@ -99,5 +99,16 @@ Then /^I should see all of the movies$/ do
   end
 end
 
+When /^I have opted to sort the movies by "(.*?)"$/ do |arg1|
+  id = arg1.gsub(' ', '_')+"_header"
+  puts "#{id}"
+  click_link(id)
+end
 
-
+Then /^I should see "(.*?)" before "(.*?)"$/ do |arg1, arg2|
+  all('td').each do |td|
+    if td[:class] == "title"
+      puts "#{td.text}"
+    end
+  end
+end
